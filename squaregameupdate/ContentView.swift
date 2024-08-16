@@ -1,89 +1,78 @@
-
-
 import SwiftUI
 
-struct ContentView: View {
-    let columns = [
-        GridItem(.flexible()), //grid layout for the button and resize
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
-    
-    let colors: [Color] = [.red, .green, .blue, .yellow]
-    
-    @State private var buttonColors: [Color] = Array(repeating: .gray, count: 9)  // store color in each button
-    @State private var score: Int = 0  // store score
-    @State private var lastClickedIndex: Int? = nil //store check near colorr and check
-    
+struct GameMenuView: View {
     var body: some View {
-        VStack {                      //vertically
-            Text("Score: \(score)")
-                .font(.headline)
-                .padding()
-            
-            LazyVGrid(columns: columns, spacing: 10) {
-                ForEach(0..<9) { index in
-                    Button(action: {
-                        handleButtonClick(at: index)
-                    }) {
-                        Text("Button \(index + 1)")
-                            .frame(maxWidth: .infinity, maxHeight: 50)
-                            .background(buttonColors[index])
-                            .foregroundColor(.white)
-                            .cornerRadius(8)
-                    }
-                }
-            }
-            .padding()
-            
-            Button(action: resetColors) {
-                Text("Reset")
-                    .padding()
-                    .background(Color.blue)
+        VStack(spacing: 30) {
+            // Game Logo
+            Image(systemName: "gamecontroller.fill")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 180, height: 180)
+                .foregroundColor(.purple)
+                .padding(.top, 60)
+
+            Spacer()
+
+            // Start Game Button
+            Button(action: {
+                // Action to start the game
+            }) {
+                Text("START GAME")
+                    .font(.title2)
+                    .bold()
                     .foregroundColor(.white)
-                    .cornerRadius(8)
+                    .frame(maxWidth: .infinity, minHeight: 60)
+                    .background(Color.blue)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 50) // Adjust padding for content size
             }
-            .padding()
-        }
-    }
-    
-    func randomColor() -> Color {
-        colors.randomElement() ?? .gray
-    }
-    
-    func handleButtonClick(at index: Int) {
-        // Set the button color
-        buttonColors[index] = randomColor()
-        
-        // Check for adjacent buttons
-        if let lastIndex = lastClickedIndex {
-            let adjacentIndices = [
-                lastIndex - 1, lastIndex + 1, // Left and right
-                lastIndex - 3, lastIndex + 3  // Top and bottom
-            ]
-            
-            if adjacentIndices.contains(index) {
-                if buttonColors[lastIndex] == buttonColors[index] {
-                    score += 1
-                }
+
+            // Highscore Button
+            Button(action: {
+                // Action to show highscore
+            }) {
+                Text("HIGHSCORE")
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, minHeight: 60)
+                    .background(Color.green)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 50) // Adjust padding for content size
             }
+
+            // Guide Button
+            Button(action: {
+                // Action to show guide
+            }) {
+                Text("GUIDE")
+                    .font(.title2)
+                    .bold()
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, minHeight: 60)
+                    .background(Color.orange)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 50) // Adjust padding for content size
+            }
+
+            Spacer()
+
         }
-        
-        // Update last clicked index
-        lastClickedIndex = index
+        .background(LinearGradient(gradient: Gradient(colors: [Color.red, Color.yellow]), startPoint: .top, endPoint: .bottom))
+        .edgesIgnoringSafeArea(.all)
     }
-    
-    func resetColors() {
-        buttonColors = Array(repeating: .gray, count: 9)
-        score = 0
-        lastClickedIndex = nil
+}
+
+struct ContentView: View {
+    var body: some View {
+        GameMenuView()
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+            .previewDevice("iPhone 15 Pro")
     }
 }
-
 
